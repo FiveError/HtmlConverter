@@ -1,0 +1,41 @@
+﻿@page "/html-converter"
+
+<PageTitle>Html Converter</PageTitle>
+
+<h1>This service allows to convert HTML file to PDF file</h1>
+
+<InputFile OnChange="@LoadFiles" accept=".html" />
+
+@if (IsUploading)
+{
+   <h3>Please, wait. Your file is converting!</h3> 
+}
+
+<button OnClick="@DowbloadFile" disabled="@IsDonwloadDisabled">Download</button>
+
+
+
+@code {
+    [Parameter]
+    public bool IsDonwloadDisabled { get; set; } = true;
+
+    [Parameter]
+    public bool IsUploading { get; set; } = false;
+
+    private Guid clientGuid { get; set; } = Guid.NewGuid();
+
+    private async void LoadFiles(InputFileChangeEventArgs f)
+    {
+        using (FileStream fs = new FileStream($"/var/tmp/{clientGuid}:{f.File.Name}", FileMode.Create))
+        {
+            await f.File.OpenReadStream().CopyToAsync(fs);
+        }
+        IsUploading = true;
+        await InvokeAsync(StateHasChanged);
+
+    }
+    private void DowbloadFile()
+    {
+
+    }
+}
