@@ -5,7 +5,9 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebServiceClient", "WebServiceClient\WebServiceClient.csproj", "{E48E73EB-6119-41FF-83CC-F0C644002715}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseProvider", "DatabaseProvider\DatabaseProvider.csproj", "{EB97B808-8373-43F5-936A-4B6A9BCE7629}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseProvider", "DatabaseProvider\DatabaseProvider.csproj", "{EB97B808-8373-43F5-936A-4B6A9BCE7629}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{87752944-2E9C-420F-B826-137022AB360E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{EB97B808-8373-43F5-936A-4B6A9BCE7629}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB97B808-8373-43F5-936A-4B6A9BCE7629}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB97B808-8373-43F5-936A-4B6A9BCE7629}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87752944-2E9C-420F-B826-137022AB360E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87752944-2E9C-420F-B826-137022AB360E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87752944-2E9C-420F-B826-137022AB360E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87752944-2E9C-420F-B826-137022AB360E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

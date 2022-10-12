@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+  databaseprovider:
+    image: ${DOCKER_REGISTRY-}databaseprovider
+    build:
+      context: .
+      dockerfile: DatabaseProvider/Dockerfile
+    ports:
+      - "8080:80"
+
+  webserviceclient:
+    image: ${DOCKER_REGISTRY-}webserviceclient
+    build:
+      context: .
+      dockerfile: WebServiceClient/Dockerfile
+    ports:
+      - "80:80"
