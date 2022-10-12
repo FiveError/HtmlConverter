@@ -7,7 +7,7 @@ namespace DatabaseProvider.Controllers
     [ApiController]
     public class QueueController : ControllerBase
     {
-        [HttpPost("{id_converter}")]
+        [HttpPut("{id_converter}")]
         public string AddDocumentToQueue(int id_converter)
         {
             string filename = "";
@@ -32,7 +32,7 @@ namespace DatabaseProvider.Controllers
         {
             string filename = "";
             DB.Instance.RunSqlRequestQuery("BEGIN TRANSACTION");
-            string SqlRequest = $"SELECT * FROM queues WHERE id_convert = {id_converter}";
+            string SqlRequest = $"SELECT * FROM queues WHERE id_converter = {id_converter}";
             var result = DB.Instance.RunSqlRequestReader(SqlRequest);
             while (result.Read())
             {
@@ -64,8 +64,10 @@ namespace DatabaseProvider.Controllers
        [HttpPost("{filename}")]
        public int InsertFilenameToDocuments(string filename)
         {
+            DB.Instance.RunSqlRequestQuery("BEGIN TRANSACTION");
             string SqlRequest = $"INSERT INTO documents (filename) VALUES ('{filename}')";
             DB.Instance.RunSqlRequestQuery(SqlRequest);
+            DB.Instance.RunSqlRequestQuery("COMMIT");
             return 0;
         }
 

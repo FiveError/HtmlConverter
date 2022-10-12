@@ -8,7 +8,7 @@
 
 @if (IsConverting)
 {
-    <h3>Please, wait! Your file is converting ...</h3>
+    <h3>"@NotificationMessage"</h3>
 }
 
 <button onclick="@ConvertFile" disabled="@IsConvertDisabled">Convert</button> 
@@ -25,6 +25,7 @@
 
     [Parameter]
     public bool IsConverting { get; set; } = false;
+    public string NotificationMessage { get; set; }
 
     private Guid clientGuid { get; set; } = Guid.NewGuid();
     private string fileName { get; set; } = "";
@@ -46,7 +47,14 @@
     private async void ConvertFile()
     {
         IsConverting = true;
+        NotificationMessage = "Please, wait! Your file is converting ...";
         await InvokeAsync(StateHasChanged);
+        var result = await Client.Instance.AddDocumentToQueue(fileName); 
+        if(result == -1)
+        {
+            NotificationMessage = "Something went wrong!";
+            await InvokeAsync(StateHasChanged);
+        }
     }
     private void DownloadFile()
     {

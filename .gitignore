@@ -221,6 +221,7 @@ project.lock.json
 # UWP Projects
 AppPackages/
 
+HtmlPdfConverter/.local-chromium/
 #####
 # End of core ignore list, below put you custom 'per project' settings (patterns or path)
 #####

@@ -8,6 +8,9 @@ services:
       dockerfile: DatabaseProvider/Dockerfile
     ports:
       - "8080:80"
+    networks:
+      - my_network
+   
 
   webserviceclient:
     image: ${DOCKER_REGISTRY-}webserviceclient
@@ -16,3 +19,32 @@ services:
       dockerfile: WebServiceClient/Dockerfile
     ports:
       - "80:80"
+    volumes:
+      - "Docs:/var/tmp"
+    networks:
+      - my_network
+    depends_on:
+      - databaseprovider
+
+  htmlpdfconverter:
+    image: ${DOCKER_REGISTRY-}htmlpdfconverter
+    build:
+      context: .
+      dockerfile: HtmlPdfConverter/Dockerfile
+    volumes:
+      - "Docs:/var/tmp"
+    networks:
+      - my_network
+    depends_on:
+      - databaseprovider
+  
+
+volumes:
+  Docs:
+    external: true
+
+networks:
+  my_network:
+    external:
+        name: my_network
+ 

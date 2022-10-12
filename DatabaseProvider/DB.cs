@@ -28,13 +28,13 @@ namespace DatabaseProvider
             }
         }
 
-        public void RunSqlRequestQuery(string Request)
+        public int RunSqlRequestQuery(string Request)
         {
             OpenConnection();
             SqliteCommand command = new SqliteCommand();
             command.Connection = connection;
             command.CommandText = Request;
-            command.ExecuteNonQuery();
+            return command.ExecuteNonQuery();
 
         }
         public SqliteDataReader? RunSqlRequestReader(string Request)

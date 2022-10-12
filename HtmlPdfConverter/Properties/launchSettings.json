@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "HtmlPdfConverter": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
