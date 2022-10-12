@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-	  <DockerfileRunArguments>-v Docs:/var/tmp</DockerfileRunArguments>
+	  <DockerfileRunArguments>-v Docs:/var/tmp -p 0.0.0.0:80:80</DockerfileRunArguments>
   </PropertyGroup>
 
   <ItemGroup>

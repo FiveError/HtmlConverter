@@ -4,14 +4,15 @@
 
 <h1>This service allows to convert HTML file to PDF file</h1>
 
-<InputFile OnChange="@LoadFiles" accept=".html" />
+<InputFile OnChange="@LoadFiles"  accept=".html" />
 
-@if (IsUploading)
+@if (IsConverting)
 {
-   <h3>Please, wait. Your file is converting!</h3> 
+    <h3>Please, wait! Your file is converting ...</h3>
 }
 
-<button OnClick="@DowbloadFile" disabled="@IsDonwloadDisabled">Download</button>
+<button onclick="@ConvertFile" disabled="@IsConvertDisabled">Convert</button> 
+<button OnClick="@DownloadFile" disabled="@IsDonwloadDisabled">Download</button>
 
 
 
@@ -20,21 +21,34 @@
     public bool IsDonwloadDisabled { get; set; } = true;
 
     [Parameter]
-    public bool IsUploading { get; set; } = false;
+    public bool IsConvertDisabled { get; set; } = true;
+
+    [Parameter]
+    public bool IsConverting { get; set; } = false;
 
     private Guid clientGuid { get; set; } = Guid.NewGuid();
+    private string fileName { get; set; } = "";
 
     private async void LoadFiles(InputFileChangeEventArgs f)
     {
-        using (FileStream fs = new FileStream($"/var/tmp/{clientGuid}:{f.File.Name}", FileMode.Create))
+        IsConvertDisabled = true;
+        fileName = $"{clientGuid}:{f.File.Name}";
+
+        using (FileStream fs = new FileStream($"/var/tmp/{fileName}", FileMode.Create))
         {
             await f.File.OpenReadStream().CopyToAsync(fs);
         }
-        IsUploading = true;
+        IsConvertDisabled = false;
         await InvokeAsync(StateHasChanged);
 
     }
-    private void DowbloadFile()
+
+    private async void ConvertFile()
+    {
+        IsConverting = true;
+        await InvokeAsync(StateHasChanged);
+    }
+    private void DownloadFile()
     {
 
     }
