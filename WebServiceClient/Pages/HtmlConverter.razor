@@ -1,4 +1,5 @@
 ﻿@page "/html-converter"
+@inject IJSRuntime JS
 
 <PageTitle>Html Converter</PageTitle>
 
@@ -12,7 +13,7 @@
 }
 
 <button onclick="@ConvertFile" disabled="@IsConvertDisabled">Convert</button> 
-<button OnClick="@DownloadFile" disabled="@IsDonwloadDisabled">Download</button>
+<button onclick="@DownloadFile" disabled="@IsDonwloadDisabled">Download</button>
 
 
 
@@ -27,12 +28,28 @@
     public bool IsConverting { get; set; } = false;
     public string NotificationMessage { get; set; }
 
+    private FileSystemWatcher downloadWatcher = new FileSystemWatcher("//var/tmp/");
+
     private Guid clientGuid { get; set; } = Guid.NewGuid();
     private string fileName { get; set; } = "";
 
-    private async void LoadFiles(InputFileChangeEventArgs f)
+    protected override async Task OnInitializedAsync()
+    {
+        InitWatcher();
+
+    }
+
+    private async void PdfCreated(object sender, FileSystemEventArgs e)
+    {
+        IsDonwloadDisabled = false;
+        NotificationMessage = "You file is ready for downloading!";
+        await InvokeAsync(StateHasChanged);
+    } 
+
+    private async Task LoadFiles(InputFileChangeEventArgs f)
     {
         IsConvertDisabled = true;
+        IsDonwloadDisabled = true;
         fileName = $"{clientGuid}:{f.File.Name}";
 
         using (FileStream fs = new FileStream($"/var/tmp/{fileName}", FileMode.Create))
@@ -44,9 +61,18 @@
 
     }
 
-    private async void ConvertFile()
+    private void InitWatcher()
+    {
+        downloadWatcher.Created += PdfCreated;
+        downloadWatcher.Filter = $"{clientGuid}*.pdf";
+        downloadWatcher.EnableRaisingEvents = true;
+    }
+
+
+    private async Task ConvertFile()
     {
         IsConverting = true;
+        IsConvertDisabled = true;
         NotificationMessage = "Please, wait! Your file is converting ...";
         await InvokeAsync(StateHasChanged);
         var result = await Client.Instance.AddDocumentToQueue(fileName); 
@@ -55,9 +81,21 @@
             NotificationMessage = "Something went wrong!";
             await InvokeAsync(StateHasChanged);
         }
+
+
     }
-    private void DownloadFile()
+    private async Task DownloadFile()
     {
+        var downloadFilenamePath = "//var/tmp/" + fileName.Split('.')[0] + ".pdf";
+        var downloadFilename = downloadFilenamePath.Split(':')[1];
+        Stream fileStream = File.OpenRead(downloadFilenamePath);
+        using var streamRef = new DotNetStreamReference(fileStream);
+        await JS.InvokeVoidAsync("downloadFileFromStream", downloadFilename, streamRef);
+        File.Delete(downloadFilenamePath);
+        IsDonwloadDisabled = true;
+        NotificationMessage = "Thank you for using our web service!";
+        await InvokeAsync(StateHasChanged);
 
     }
 }
+
