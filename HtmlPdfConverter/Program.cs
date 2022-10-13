@@ -7,7 +7,7 @@ async Task GeneratePdf(string Filename)
     string outputFilePath = "//var/tmp/" + Filename.Split('.')[0] + ".pdf";
     var browserFetcher = new BrowserFetcher();
     await browserFetcher.DownloadAsync();
-    await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true , Args = new string[] { "--no-sandbox"} });
+    await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true , Args = new string[] { "--no-sandbox"}, Timeout=60000 });
     await using var page = await browser.NewPageAsync();
     await page.GoToAsync($"file:///var/tmp/{Filename}");
     await page.PdfAsync(outputFilePath);
@@ -32,6 +32,7 @@ while (true)
         await GeneratePdf(filename);
         File.Delete("//var/tmp/" + filename);
         await Client.Instance.RemoveDocument(converterParameters.Id);
+        Console.WriteLine("Generating complete");
     }
     Console.WriteLine("Waiting file for converting...");
     Thread.Sleep(5000);

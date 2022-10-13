@@ -34,9 +34,6 @@ namespace HtmlPdfConverter
             }
         }
 
-        /*
-         * Remove from queue
-        */
         public async Task<string> GetCurrentDocument(int id)
         {
             var result = await client.GetAsync($"/api/Queue/{id}");

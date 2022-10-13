@@ -30,7 +30,7 @@
 
     private FileSystemWatcher downloadWatcher = new FileSystemWatcher("//var/tmp/");
 
-    private Guid clientGuid { get; set; } = Guid.NewGuid();
+    private string clientGuid { get; set; } = Guid.NewGuid().ToString().Split('-')[0];
     private string fileName { get; set; } = "";
 
     protected override async Task OnInitializedAsync()
@@ -75,7 +75,7 @@
         IsConvertDisabled = true;
         NotificationMessage = "Please, wait! Your file is converting ...";
         await InvokeAsync(StateHasChanged);
-        var result = await Client.Instance.AddDocumentToQueue(fileName); 
+        var result = await Client.Instance.AddDocumentToQueue($"{fileName}"); 
         if(result == -1)
         {
             NotificationMessage = "Something went wrong!";
